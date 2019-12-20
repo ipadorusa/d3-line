@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>npm-package</title>
+    <link rel="stylesheet" type="text/css" href="https://www.saramin.co.kr/sri_css/company/pattern.css">
+    <link rel="stylesheet" href="sample.css">
+    <style>
+        * {margin:0;padding:0}
+        ul,ol,li {list-style:none}
+        .lineChart .wrap_line {fill:none;stroke-width:2px}
+        .lineChart .wrap_line .path {stroke:#2365f2}
+        .lineChart .dot {stroke-width:3px;stroke:#00d5ab;fill:#fff}
+        .line_blue .lineChart .wrap_line .path {stroke:#00d5ab}
+        .line_blue .lineChart .wrap_dot_1 .dot {stroke-width:3px;stroke:#00d5ab;fill:#fff}
+
+
+
+        .lineChart .yAxis .tick line {stroke:#ddd}
+        .lineChart .yAxis .tick:first-of-type line {stroke:#666}
+        .lineChart .xAxis .tick .tick_txt {fill:#666;font-size:14px}
+        .lineChart .yAxis .tick .tick_txt {fill:#888;font-size:13px}
+        .lineChart .domain {display:none}
+        .lineChart .hidden_bar {cursor:pointer}
+        .tooltip {position:absolute;top:0;left:0;}
+        .x_line {stroke:#000;stroke-dasharray:3}
+        .chart07,
+        .chart08,
+        .chart09 {position:relative;}
+        .lineChart {position:relative;}
+        .lineChart .dot {cursor:pointer}
+        .chart07 .tooltip .tooltip_list {border-radius:5px;padding:5px 10px 7px 10px;background-color:#404040}
+        .chart07 .tooltip .tooltip_list li {list-style:none}
+        .chart07 .tooltip .tooltip_list .data_title {color:#fff;font-size:14px;line-height:18px}
+        .chart07 .tooltip .tooltip_list .data_value {margin-left:5px;color:#fff;font-size:14px;line-height:18px}
+
+        .chart08 .tooltip .tooltip_list {border-radius:5px;padding:5px 10px 7px 10px;background-color:#404040}
+        .chart08 .tooltip .tooltip_list li {list-style:none}
+        .chart08 .tooltip .tooltip_list .data_title {color:#fff;font-size:14px;line-height:18px}
+        .chart08 .tooltip .tooltip_list .data_value {margin-left:5px;color:#fff;font-size:14px;line-height:18px}
+
+
+        .chart09 {width:838px;height:330px;position:relative;}
+        .chart09 svg {width:100%}
+        .lineChart .wrap_line .path1 {stroke:#9eaeff}
+        .lineChart .wrap_line .path2 {stroke:#92c7ed}
+        .lineChart .wrap_line .path3 {stroke:#ccc}
+        .lineChart .wrap_dot_1 .dot {stroke:#93aeff}
+        .chart09 .lineChart + .tooltip {font-size:12px;padding:20px;width:168px;box-sizing:border-box;background:rgba(0,0,0,0.8);text-align:center}
+        .chart09 .lineChart + .tooltip .title {display:block;color:#fff;font-size:14px;margin-bottom:16px}
+        .chart09 .lineChart + .tooltip .years {color:#fff;font-size:14px;font-weight:bold}
+        .chart09 .lineChart + .tooltip .company_diff01 {color:#9eaeff}
+        .chart09 .lineChart + .tooltip .company_diff02 {color:#92c7ed}
+        .chart09 .lineChart + .tooltip .company_diff03 {color:#ccc}
+        .chart09 .lineChart + .tooltip .yaers {font-weight:bold}
+        .chart09 .lineChart + .tooltip .salary {margin-left:10px;font-weight:bold}
+
+        .chart09 .wrap_dot_2 {display:none}
+        .chart09 .wrap_dot_3 {display:none}
+
+        .chart07 .lineChart .wrap_line .path1 {stroke:#dbdbdb}
+        .chart07 .lineChart .dot {stroke:#dbdbdb;fill:#dbdbdb}
+        .columns {display:flex;flex-direction:row;flex-wrap:wrap;justify-content:space-around}
+        .columns .column {margin-top:20px}
+    </style>
+</head>
+<body>
+<div id="wrap" class="wrap">
+    <div class="box">
+        <h1>LineChart</h1>
+        <div class="tblType">
+            <table>
+                <colgroup>
+                    <col style="width:15%">
+                    <col style="width:13%">
+                    <col style="width:12%">
+                    <col style="width:30%">
+                    <col style="width:30%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">Parameter</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Default</th>
+                    <th scope="col">설명</th>
+                    <th scope="col">비고</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>w</td>
+                    <td>number</td>
+                    <td>838</td>
+                    <td>차트의 넓이</td>
+                    <td>넓이는 최종 w + mRight + mLeft 으로 생성된다.</td>
+                </tr>
+                <tr>
+                    <td>h</td>
+                    <td>number</td>
+                    <td>280</td>
+                    <td>차트의 높이</td>
+                    <td>높이는 최종 h + mTop + mBottom 으로 생성된다.</td>
+                </tr>
+                <tr>
+                    <td>mTop</td>
+                    <td>number</td>
+                    <td>40</td>
+                    <td>차트의 상단 여백</td>
+                    <td>상단 여백은 가장 높은 수치에 툴팁이 잘 나와야 해서 여유있게 잡는다.</td>
+                </tr>
+                <tr>
+                    <td>mRight</td>
+                    <td>number</td>
+                    <td>20</td>
+                    <td>차트의 우측 여백</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>mBottom</td>
+                    <td>number</td>
+                    <td>20</td>
+                    <td>차트의 하단 여백</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>mLeft</td>
+                    <td>number</td>
+                    <td>40</td>
+                    <td>차트의 좌측 여백</td>
+                    <td>좌측여백은 좌측의 숫자 범위가 안짤리게 잡는다</td>
+                </tr>
+                <tr>
+                    <td>ticks</td>
+                    <td>number</td>
+                    <td>7</td>
+                    <td>차트의 구분선 갯수</td>
+                    <td>데이터 0 부터 맥스값에서 나눈 값이 좌측에 표기 됩니다.</td>
+                </tr>
+                <tr>
+                    <td>circleR</td>
+                    <td>number</td>
+                    <td>3.5</td>
+                    <td>선위에 원의 반지름</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>circleExpand</td>
+                    <td>number</td>
+                    <td>1.5</td>
+                    <td>선위에 원의 반지름 x (1.5) 선택시 확장 숫치</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>dataRangeMin</td>
+                    <td>number</td>
+                    <td>0</td>
+                    <td>데이터 표현 최소값</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>dataRangeMax</td>
+                    <td>number</td>
+                    <td>100</td>
+                    <td>데이터 표현 최대값</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>yAxisX</td>
+                    <td>number</td>
+                    <td>-8</td>
+                    <td>좌측 숫자와 가로선의 가로 여백</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>yAxisY</td>
+                    <td>number</td>
+                    <td>3.5</td>
+                    <td>좌측 숫자와 가로선의 높이 여백</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>focusData</td>
+                    <td>number</td>
+                    <td>null</td>
+                    <td>차트가 그려지고 강조하고 싶은 데이터의 키 값</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>toolTip</td>
+                    <td>string</td>
+                    <td>null</td>
+                    <td>툴팁 사용여부</td>
+                    <td>툴팁은 string으로 넣을수 있고 {{key}}, {{value}}, {{xKey}}으로 값을 대입 시킬수 있다</td>
+                </tr>
+                <tr>
+                    <td>toolTipLine</td>
+                    <td>boolean</td>
+                    <td>false</td>
+                    <td>툴팁 표현시 위치선</td>
+                    <td>연봉정보 그래프에서만 사용중</td>
+                </tr>
+                <tr>
+                    <td>mode</td>
+                    <td>string</td>
+                    <td>3.5</td>
+                    <td>그래프가 연봉정보(다중선)와 그냥 라인 그래프(단일선)로 나뉨</td>
+                    <td>툴팁에 표현 방법 및 포커스 라인의 차이가 있다.</td>
+                </tr>
+                <tr>
+                    <td>tooltipAxisX</td>
+                    <td>number</td>
+                    <td>0</td>
+                    <td>툴팁 x축 보정값</td>
+                    <td>가운데선을 넘으면 → 으로 가면 보정값으로 tooltipReverseAxisX을 사용해야한다.</td>
+                </tr>
+                <tr>
+                    <td>tooltipReverseAxisX</td>
+                    <td>number</td>
+                    <td>0</td>
+                    <td>툴팁 x축 보정값</td>
+                    <td>가운데선을 넘으면 ← 으로 가면 보정값으로 tooltipAxisX 사용해야한다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="columns">
+            <div class="column">
+                <h2>mode: null</h2>
+                <div class="wrap_chart chart07"></div>
+            </div>
+            <div class="column">
+                <h2>mode: null</h2>
+                <div class="wrap_chart chart08"></div>
+            </div>
+            <div class="column">
+                <h2>mode: null</h2>
+                <div class="wrap_chart chart09"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="test/build.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+
+        new UI.LineChart('.chart07', {
+            w: 838,
+            h: 280,
+            mTop: 80,
+            mLeft: 50,
+            ticks: 6,
+            circleR: 5,
+            toolTip: '<ul class="tooltip_list">' +
+                '<li><span class="data_title">{{key}}</span><span class="data_value">{{value}}</span></li>' +
+                '</ul>'
+        }, [
+            [
+                [
+                    {
+                        "7일": 10,
+                        "8일": 20,
+                        "9일": 30,
+                        "10일": 40,
+                        "11일": 50,
+                        "12일": 42,
+                        "13일": 62,
+                        "14일": 72
+                    }
+                ],
+                ['추천수']
+            ]
+        ]);
+        new UI.LineChart('.chart08', {
+            w: 838,
+            h: 280,
+            mTop: 80,
+            mLeft: 50,
+            ticks: 6,
+            toolTip: '<ul class="tooltip_list">' +
+                '<li><span class="data_title">{{key}}</span><span class="data_value">{{value}}</span></li>' +
+                '</ul>'
+        }, [
+            [
+                [
+                    {
+                        "5/19": 3000,
+                        "5/20": 3602,
+                        "5/22": 13000,
+                        "5/23": 2000,
+                        "5/24": 6700,
+                        "5/25": 3002,
+                        "5/26": 4002,
+                        "5/27": 2002,
+                        "5/28": 3002,
+                        "5/29": 4002,
+                        "5/29": 5002
+                    }
+                ],
+                ["추천수"]
+            ]
+        ]);
+        new UI.LineChart('.chart09', {
+            w: 838,
+            h: 330,
+            mTop: 40,
+            mLeft: 60,
+            mRight: 0,
+            mBottom: 20,
+            ticks: 6,
+            mode: "salary",
+            tooltipAxisX: 20,
+            tooltipReverseAxisX: 200,
+            focusLine: true,
+            focusData: 37,
+            toolTip: '<strong class="title">평균연봉/<span class="years">{{xKey}}</span></strong>' +
+                '<ul class="tooltip_list">' +
+                '<li class="company_diff01"><span class="years">{{key}}</span><span class="salary">{{value}}만원</span></li>' +
+                '<li class="company_diff02"><span class="years">{{key}}</span><span class="salary">{{value}}만원</span></li>' +
+                '<li class="company_diff03"><span class="years">{{key}}</span><span class="salary">{{value}}만원</span></li>' +
+                '</ul>'
+        }, [
+            [
+                [
+                    {
+                        0: 0
+                    }
+                ],
+                ["2019", "2018", "2017"]
+            ]
+        ]);
+    });
+</script>
+</body>
+</html>

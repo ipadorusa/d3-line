@@ -1,0 +1,22 @@
+{
+  "name": "@saramin/ui-d3-line",
+  "version": "1.2.1",
+  "description": "",
+  "main": "src/d3-line.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://sri-git.saraminhr.co.kr/uidev/npm/ui-d3-line"
+  },
+  "author": "ipadorusa",
+  "license": "ISC",
+  "dependencies": {
+    "@saramin/ui-d3-helper": "^1.0.0",
+    "@saramin/ui-d3-selector": "^1.0.0",
+    "nodelist-foreach-polyfill": "^1.2.0",
+    "classlist-polyfill":"^1.2.0",
+    "element-closest-polyfill": "^1.0.0"
+  }
+}
